@@ -7,25 +7,82 @@ const ResumeSchema = new Schema({
     ref: "user",
   },
   education: {
-    graduation: String,
-    senior12th: String,
-    secondary10th: String,
-    postgraduation: String,
-    diploma: String,
-    phd: String,
+
+    type:Array,
+      items:{
+      college:String,
+      course: String,
+      status: String,
+      startDate: String,
+      endDate: String,
+      performanceScale: String,
+      performance: String,
+      }
+    
   },
-  job: String,
-  academicProject: String,
-  portfolio: String,
-  skills: {
+  job:{
     type:Array,
     items:{
-    String
+    profileName:String,
+    companyName:String,
+    status:String,
+    startDate:String,
+    endDate:String,
+    Description:String
     }
   },
-  coverLetter: String,
-  yourAvailability: String,
+  // academicProject: String,
+  internship:{
+    type:Array,
+    items:{
+        profileName:String,
+        companyName:String,
+        status:String,
+        startDate:String,
+        endDate:String,
+        description:String
+    }
+  },
+  responsibilties:
+  {
+    type:Array,
+    items:{
+      type:String
+    }
+  },
+  training:{
+    type:Array,
+    items:{
+     courseName:String,
+     platformName:String,
+     status:String,
+     startDate:String,
+     endDate:String
+    }
+  },
+
+  portfolio:{
+    type:Array,
+    items:{
+      type:String,
+    }
+  } ,
+
+  skills: {
+    type: Array,
+    items: {
+      String,
+    },
+  },
+  additionalDetail:{
+    type:Array,
+    items:{
+     type:String
+    }
   
+  }
+  // coverLetter: String,
+  // yourAvailability: String,
 });
 const Resume = mongoose.model("resume", ResumeSchema);
 // User.createIndexes();

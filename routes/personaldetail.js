@@ -43,6 +43,11 @@ router.post("/user", fetchuser,upload.single('profilePic'), async (req, res) => 
   try {
     console.log(req.file);
        let obj =JSON.parse(req.body.data);
+       var temp;
+       if(req.file)
+       {
+            temp=req.file.path;
+       }
       //  console.log(obj);
        user = await Detail.create({
       name: obj.name,
@@ -50,7 +55,7 @@ router.post("/user", fetchuser,upload.single('profilePic'), async (req, res) => 
       phoneNumber: obj.phoneNumber,
       address: obj.address,
       user: req.user.id,
-      profilePic:req.file.path
+      profilePic:temp
     });
     res.json({ message: "success" });
   } catch (error) {

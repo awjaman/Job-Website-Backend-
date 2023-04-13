@@ -22,8 +22,14 @@ const EmployerSchema = new Schema({
     required: true,
   },
   mobileNo: {
-    type: Number,
-    required: true,
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+    countryCode: {
+      type: String,
+      required: true,
+    },
   },
   isVerified: {
     type: Boolean,

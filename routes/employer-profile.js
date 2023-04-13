@@ -1,6 +1,7 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const Employer = require("../models/Employer");
+const InternshipDetail = require("../models/InternshipDetail");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -81,6 +82,7 @@ router.put("/manage-account/change-password/:id", fetchuser, async (req, res) =>
 
 router.delete("/manage-account/delete/:id", fetchuser, async (req, res) => {
   await Employer.remove({ _id: req.params.id });
+  await InternshipDetail.remove({employer:req.params.id})
   res.json({ msg: "Delete Account" });
 });
 

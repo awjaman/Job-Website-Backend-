@@ -16,6 +16,10 @@ const JobSchema = new Schema({
   assignment:{
     type:String,
   
+  },
+  status:{
+    type:String,
+     
   }
 });
 

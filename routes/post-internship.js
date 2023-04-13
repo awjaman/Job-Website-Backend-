@@ -36,37 +36,55 @@ const cpUpload = upload.fields([
   
   { name: "assignment", maxCount: 1 },
 ]);
-router.post("/internship-detail", fetchuser,cpUpload, async (req, res) => {
-    let obj = JSON.parse(req.body.data);
-  let sDate = obj.startDate;
-  let amount = obj.stipened;
-  if (!sDate.immediate && !sDate.later) {
-    res.json({
-      message: "Please select the start Date",
-    });
-  } else if (!amount.unpaid && !amount.negotiable && !amount.fixed) {
-    res.json({
-      message: "Please select one option in stipened",
-    });
-  } else {
+router.post("/internship-detail", fetchuser, async (req, res) => {
+    // let obj = JSON.parse(req.body.data);
+    let obj=req.body.data;
+  // let sDate = obj.startDate;
+  // let amount = obj.stipened;
+  // if (!sDate.immediate && !sDate.later) {
+  //   res.json({
+  //     message: "Please select the start Date",
+  //   });
+  // } else 
+
+
+  // if (!amount.unpaid && !amount.negotiable && !amount.fixed) {
+  //   res.json({
+  //     message: "Please select one option in stipened",
+  //   });
+  // }
+  //  else {
+          //    var p;
+          // if(req.files["assignment"])
+          // {
+          //   p = req.files["assignment"][0].path;   
+          // }
+          // else{
+
+          // }
+
     try {
 
-        console.log(req.files["assignment"][0]);
+        // console.log(req.files["assignment"][0]);
       detail = await InternshipDetail.create({
         department: obj.department,
         internshipType: obj.internshipType,
         city: obj.city,
         numberOfOpening: obj.numberOfOpening,
-        startDate: sDate,
+        startDate: obj.startDate,
         internshipDuration: obj.internshipDuration,
-        internResponsibilities: obj.internResponsibilities,
-        stipened: amount,
+        jobDescription: obj.jobDescription,
+        stipened: obj.stipened,
         perks: obj.perks,
         skills: obj.skills,
         question: obj.question,
-        coverLetter:obj.coverLetter,
-        availability:obj.availability,
-        assignment:req.files['assignment'][0].path,
+        coverLetter: obj.coverLetter,
+        availability: obj.availability,
+        about: obj.about,
+        additionalInformation: obj.additionalInformation,
+        // assignment:p ,
+        additionalQuestion:obj.additionalQuestion,
+        appliedDate:obj.appliedDate,
         employer: req.employer.id,
 
       });
@@ -75,7 +93,7 @@ router.post("/internship-detail", fetchuser,cpUpload, async (req, res) => {
       console.error(error.message);
       res.status(500).send("Some error occured");
     }
-  }
+  
 });
 
 module.exports = router;

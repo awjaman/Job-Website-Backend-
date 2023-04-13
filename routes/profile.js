@@ -12,7 +12,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const fetchuser = require("../middleware/fetchuser");
 const transporter = require("../emailConfig");
-
+const ObjectId = require("mongodb").ObjectId;
 
 const JWT_SECRET = process.env.SECRET_KEY; 
 
@@ -62,6 +62,78 @@ router.get("/my-application", fetchuser, async (req, res) => {
   }
 });
 
+// router.get("/my-application", fetchuser, async (req, res) => {
+//   try {
+    
+//     var applicant = Job.aggregate([
+//       {
+//         $match: {
+//           user: ObjectId(req.user.id),
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "internshipdetails",
+//           localField: "job",
+//           foreignField: "_id",
+//           as: "intern",
+//         },
+//       },
+//       { $unwind: "$intern" },
+
+//       {
+//         $lookup: {
+//           from: "resumes",
+//           localField: "user",
+//           foreignField: "user",
+//           as: "res",
+//         },
+//       },
+
+//       { $unwind: "$res" },
+
+//       {
+//         $lookup: {
+//           from: "employers",
+//           localField: "intern.employer",
+//           foreignField: "_id",
+//           as: "company",
+//         },
+//       },
+
+//       { $unwind: "$company" },
+//     ]);
+
+//     applicant.exec(async (err, result) => {
+//       if (result) {
+//         res.send(result);
+//       }
+//       if (err) {
+//         console.log("error", err);
+//       }
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Internal Server Error ");
+//   }
+// });
+
+
+
+
+
+router.get("/status", fetchuser, async (req, res) => {
+  try {
+   const userId = req.user.id;
+    const id=req.body.id;
+    const  job = await Job.findOne({ user: userId,job:id },{status:1,_id:0});
+    console.log(job);
+    res.send(job);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server error");
+  }
+});
 
  
 router.get("/view-application", fetchuser, async (req, res) => {
@@ -123,17 +195,20 @@ router.put("/update-resume/:id", fetchuser,cpUpload, async (req, res) => {
     return res.status(401).send("Not Found");
   }
 
-  let obj = JSON.parse(req.body.data);
+  // let obj = JSON.parse(req.body.data);
   const updateitem = {
-       education: obj.education,
-      job: obj.job,
-      academicProject: obj.academicProject,
-      portfolio: obj.portfolio,
-      skills: obj.skills,
-      coverLetter: req.files['coverLetter'][0].path,
-      yourAvailability: obj.availability,
-    
-     
+    education: req.body.education,
+    job: req.body.job,
+    internship: req.body.internship,
+    responsibilties: req.body.responsibilties,
+    training: req.body.training,
+    // academicProject: obj.academicProject,
+    portfolio: req.body.portfolio,
+    skills: req.body.skills,
+    // coverLetter: req.files['coverLetter'][0].path,
+    // yourAvailability: obj.availability,
+    additionalDetail: req.body.additionalDetail,
+    user: req.user.id,
   };
 
   const id = req.params.id;

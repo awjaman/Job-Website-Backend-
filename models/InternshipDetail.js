@@ -7,50 +7,52 @@ const InternshipDetailSchema = new Schema({
   },
   department: {
     type: String,
-    required: true,
+  
   },
 
   internshipType: {
     type: String,
-    required: true,
+    
   },
   city: {
     type: String,
-    required: true,
+    
   },
   numberOfOpening: {
     type: Number,
-    required: true,
+  
   },
   startDate: {
-    immediate: {
-      type: String,
-    },
-    later: {
-      from: {
-        type: Date,
-      },
-      to: {
-        type: Date,
-        validate: [dateValidator, "Start Date must be less than End Date"],
-      },
-    },
+    type:String,
+    
+    // immediate: {
+    //   type: String,
+    // },
+    // later: {
+    //   from: {
+    //     type: Date,
+    //   },
+    //   to: {
+    //     type: Date,
+    //     validate: [dateValidator, "Start Date must be less than End Date"],
+    //   },
+    // },
   },
 
   internshipDuration: {
     number:{
       type:Number,
-      required:true
+      
     },
     type:{
       type:String,
-      required:true
+     
     }
     
   },
-  internResponsibilities: {
+  jobDescription: {
     type: String,
-    required: true,
+    
   },
   stipened: {
     unpaid: {
@@ -81,14 +83,14 @@ const InternshipDetailSchema = new Schema({
   },
   perks: {
     type: Array,
-    required: true,
+    
     items: {
       type: String,
     },
   },
   skills: {
     type: Array,
-    required: true,
+    
     items: {
       type: String,
     },
@@ -118,13 +120,27 @@ const InternshipDetailSchema = new Schema({
   block:{
      type:Boolean,
      default:false
+  },
+
+  
+  additionalInformation:{
+    type:String,
+    
+  },
+  additionalQuestion:{
+    type:String
+  },
+  appliedDate:{
+    type:String
   }
+
+
 
 });
 
-function dateValidator(value) {
-  return this.startDate.later.from <= value;
-}
+// function dateValidator(value) {
+//   return this.startDate.later.from <= value;
+// }
 
 // creating model
 

@@ -60,7 +60,7 @@ router.post(
       );
 
       const link = `http://localhost:3000/user/user/
-                reset/${user._id}/${authtoken}`;
+                register/${user._id}/${authtoken}`;
       console.log(link);
 
       try {

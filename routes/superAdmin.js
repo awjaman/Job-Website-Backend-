@@ -42,7 +42,51 @@ router.post(
   }
 );
 
-router.post("/create-admin",async(req,res)=>{
+router.post(
+  "/login",async (req, res) => {
+    
+    
+    // use destructuring
+    const { email, password } = req.body;
+
+    try {
+      let superAdmin = await SuperAdmin.findOne({ email }); // take object
+      if (!superAdmin) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credential" });
+      }
+      
+      const passwordCompare = await bcrypt.compare(password, superAdmin.password);
+      if (!passwordCompare) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credential" });
+      }
+      const data = {
+        superAdmin: {
+          id: superAdmin.id,
+        },
+      };
+
+      const authtoken = jwt.sign(
+        data,
+
+        JWT_SECRET,
+        {
+          expiresIn: "50m",
+        }
+      );
+
+      res.json({ authtoken });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server error");
+    }
+  }
+);
+
+router.post("/create-admin",fetchuser,async(req,res)=>{
          try {
       let createadmin = await CreateAdmin.findOne({ email: req.body.email });
       if (createadmin) {
@@ -114,7 +158,7 @@ router.post("/create-admin",async(req,res)=>{
   
 })
 
-router.post("/verify-email/:id/:token", async (req, res) => {
+router.post("/verify-email/:id/:token",fetchuser, async (req, res) => {
   const { id, token } = req.params;
   const admin = await CreateAdmin.findById(id);
 
@@ -138,7 +182,7 @@ router.post("/verify-email/:id/:token", async (req, res) => {
 
 
 
-router.get("/get-admin", async (req, res) => {
+router.get("/get-admin",fetchuser, async (req, res) => {
   try {
     adminId = req.body.id;
     const admin = await CreateAdmin.findById(adminId).select("-password");
@@ -149,9 +193,20 @@ router.get("/get-admin", async (req, res) => {
   }
 });
 
+router.get("/list-of-admin", fetchuser, async (req, res) => {
+  try {
+    
+    const admin = await CreateAdmin.find({}).select("-password");
+    res.send(admin);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server error");
+  }
+});
 
 
-router.put("/update-admin/:id",  async (req, res) => {
+
+router.put("/update-admin/:id", fetchuser, async (req, res) => {
   let admin = await CreateAdmin.findById(req.params.id);
   if (!admin) {
     return res.status(404).send("Not Found");
@@ -181,7 +236,7 @@ router.put("/update-admin/:id",  async (req, res) => {
 });
 
 
-router.put("/update-password/:id", async (req, res) => {
+router.put("/update-password/:id",fetchuser, async (req, res) => {
   let admin = await CreateAdmin.findById(req.params.id);
   if (!admin) {
     return res.status(404).send("Not Found");
@@ -205,7 +260,7 @@ router.put("/update-password/:id", async (req, res) => {
 });
 
 
-router.delete("/delete-admin/:id",async (req, res) => {
+router.delete("/delete-admin/:id",fetchuser,async (req, res) => {
   await CreateAdmin.deleteOne({ _id: req.params.id });
 
   res.json({ msg: "Delete Account" });

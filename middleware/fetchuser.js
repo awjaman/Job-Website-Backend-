@@ -19,6 +19,9 @@ const fetchuser = (req, res, next) => {
     //  console.log(data.data);
     req.user = data.user;
     req.employer = data.employer;
+    req.superAdmin=data.superAdmin;
+    req.employeeAdmin=data.employeeAdmin;
+    req.studentAdmin=data.studentAdmin;
     // console.log(req.user.id);
     next();
   } catch (error) {
